@@ -14,13 +14,13 @@ unw_B <- read.delim('../unweighted_unifrac_stool_post_ampOTUnorm.txt',
 # Metadata needs three columns - 
 # 1. sample IDs (e.g. "P21_pre_stool")
 # 2. the unifying participant/unit ID (e.g."P21") 
-# 3. the binary metadata group (e.g. "pre")
+# 3. the binary metadata group, corresponding to the two distance input matrices (e.g. "pre" or "post")
 meta <- read.delim('../plotcrust_metadata_aspstool.txt',
                    header=1, row.names=1, check.names = F)
 
-thing <- 'patient'
-group <- 'group'
-groups <- c('asp','stool')  # Names of the two distance matrices/categories
+thing <- 'patient'  # The meta header for the participant ID column
+group <- 'group'  # The meta header for the metadata group category (which of the two distance matrices)
+groups <- c('asp','stool')  # Names of the two categories in the group
 metaA <- meta[meta[,group] == groups[1],]  # Split the metadata into the two groups
 metaB <- meta[meta[,group] == groups[2],]
 
@@ -132,6 +132,7 @@ perm_pro_dist <- sqrt(sum(perm_dist$distance^2))
 #   theme_classic() + facet_grid(. ~ realperm)
 
 ### Multiple permutations ###
+### As used for the plots on the GitHub readme page
 
 # Repeat the permutation "j" times
 real_dist$real_perm <- 'true_distance'
