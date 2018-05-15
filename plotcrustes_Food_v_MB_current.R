@@ -217,14 +217,22 @@ pscat.groups <- ggplot(PCOA_plot_many.groups.sub) +
 ggsave(pscat.groups, filename = '../IMP/results/procrustes_vs_med_permuted_group_colored_v3.png', width = 8.5, height = 4, dpi = 300)
 
 
-dist_plot_groups.sub <- dist_plot_groups[dist_plot_groups$real_perm == 'permuted8' | dist_plot_groups$real_perm == 'true_distance', ]
+dist_plot_groups.sub <- dist_plot_groups[dist_plot_groups$real_perm == 'permuted9' | dist_plot_groups$real_perm == 'true_distance', ]
+dist_plot_groups.sub$real_perm[dist_plot_groups.sub$real_perm == 'permuted9'] <- 'permuted'
+dist_plot_groups.sub$real_perm[dist_plot_groups.sub$real_perm == 'true_distance'] <- 'original'
+dist_plot_groups.sub$real_perm <- factor(x = dist_plot_groups.sub$real_perm, levels = c('original','permuted'), ordered = T)
+
 
 pbox.group <- ggplot(dist_plot_groups.sub, aes(x=real_perm, y=distance, group=real_perm)) +
   geom_boxplot(outlier.colour = 'white') +
-  geom_jitter(width = 0.25, alpha=0.6) +
+  geom_jitter(width = 0.28, alpha=0.45) +
   theme_classic() +
   scale_color_manual(values=cols) +
-  theme(axis.text.x = element_text(angle=45, hjust=1), axis.title.x = element_blank(),
-        axis.text = element_text(color='black'))
+  theme(axis.title.x = element_blank(),
+        axis.text = element_text(color='black', size=10),
+        axis.title.y = element_text(color='black',size=12))
 # To save
-ggsave(pbox.group, filename = 'distance_boxplots_vs_med_permutation_group.png', width = 3.5, height = 5, dpi = 300)
+ggsave(pbox.group, filename = '../IMP/results/distance_boxplots_vs_med_permutation_group_v2.png', width = 3.5, height = 5, dpi = 300)
+
+shapiro.test(dist_plot_groups.sub[dist_plot_groups.sub$real_perm=='original', 'distance'])
+wilcox.test(dist_plot_groups.sub$distance ~ dist_plot_groups.sub$real_perm, paired=F)$p.value
